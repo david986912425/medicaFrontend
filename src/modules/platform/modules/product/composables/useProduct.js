@@ -7,31 +7,39 @@ const useProduct = () => {
     const API = import.meta.env.VITE_APP_API
     const router = useRouter()
 
+    const fetchWithNgrokHeader = async (url, options = {}) => {
+        const defaultHeaders = {
+            "ngrok-skip-browser-warning": "true",
+            'Content-Type': 'application/json'
+        };
+
+        options.headers = { ...defaultHeaders, ...options.headers };
+
+        const response = await fetch(url, options);
+        return response;
+    };
+
     const getProducts = async () => {
-        const response = await fetch(`${ API }/api/products`)
+        const response = await fetchWithNgrokHeader(`${ API }/api/products`)
         const data = await response.json()
         return data.products
     }
 
     const getProductById = async ( id ) => {
-        const response = await fetch(`${API}/api/products/${id}`);
+        const response = await fetchWithNgrokHeader(`${API}/api/products/${id}`);
         const data = await response.json();
         return data.product;
     }
 
     const getProductByName = async ( name ) => {
-        const response = await fetch(`${API}/api/products?search=${name}`);
+        const response = await fetchWithNgrokHeader(`${API}/api/products?search=${name}`);
         const data = await response.json();
         return data.products;
     }
 
     const addProduct = async ( data ) => {
-        await fetch(`${ API }/api/products`, {
+        await fetchWithNgrokHeader(`${ API }/api/products`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-            },
             body: JSON.stringify(data)
         })
         .then(res => {
@@ -44,11 +52,8 @@ const useProduct = () => {
     }
 
     const deleteProduct = ( id ) => {
-        fetch(`${API}/api/products/${id}`, {
+        fetchWithNgrokHeader(`${API}/api/products/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json'
-            }   
         })
         .then(res => {
             if (res.ok) { 
@@ -73,11 +78,8 @@ const useProduct = () => {
     }
 
     const updateProduct = ( id, data ) => {
-        fetch(`${API}/api/products/${id}`, {
+        fetchWithNgrokHeader(`${API}/api/products/${id}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify(data)
         })
         .then(res => {
