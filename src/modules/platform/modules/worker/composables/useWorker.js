@@ -4,14 +4,22 @@ const useWorker = () => {
     const API = import.meta.env.VITE_APP_API
     const router = useRouter()
 
+    const fetchWithNgrokHeader = async (url, options = {}) => {
+        const defaultHeaders = {
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "true",
+            'x-token': localStorage.getItem('idToken')
+        };
+
+        options.headers = { ...defaultHeaders, ...options.headers };
+
+        const response = await fetch(url, options);
+        return response;
+    };
+
     const addWorker = async ( data ) => {
-        await fetch(`${ API }/api/user`, {
+        await fetchWithNgrokHeader(`${ API }/api/user`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            },
             body: JSON.stringify(data)
         })
         .then(res => {
@@ -24,26 +32,16 @@ const useWorker = () => {
     }
 
     const getWorkers = async () => {
-        const response = await fetch(`${ API }/api/user`, {
+        const response = await fetchWithNgrokHeader(`${ API }/api/user`, {
             method: 'GET',
-            headers: {
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            }
         })
         const data = await response.json()
         return data.usuarios
     }
 
     const getWorkerById = async ( id ) => {
-        const response = await fetch(`${API}/api/user/${id}`, {
+        const response = await fetchWithNgrokHeader(`${API}/api/user/${id}`, {
             method: 'GET',
-            headers: {
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            }
         });
         const data = await response.json();
         return data;
@@ -55,13 +53,8 @@ const useWorker = () => {
     }
 
     const updateWorker = async ( id, data ) => {
-        await fetch(`${API}/api/user/${id}`, {
+        await fetchWithNgrokHeader(`${API}/api/user/${id}`, {
             method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            },
             body: JSON.stringify(data)
         })
         .then(res => {
@@ -74,13 +67,8 @@ const useWorker = () => {
     }
 
     const deleteWorker = ( id ) => {
-        fetch(`${API}/api/user/${id}`, {
+        fetchWithNgrokHeader(`${API}/api/user/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            }   
         })
         .then(res => {
             if (res.ok) { 

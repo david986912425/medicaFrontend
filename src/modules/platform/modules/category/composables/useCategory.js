@@ -4,14 +4,22 @@ const useCategory = () => {
     const API = import.meta.env.VITE_APP_API
     const router = useRouter()
 
+    const fetchWithNgrokHeader = async (url, options = {}) => {
+        const defaultHeaders = {
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "true",
+            'x-token': localStorage.getItem('idToken')
+        };
+
+        options.headers = { ...defaultHeaders, ...options.headers };
+
+        const response = await fetch(url, options);
+        return response;
+    };
+
     const addCategory = async ( data ) => {
-        await fetch(`${ API }/api/category`, {
+        await fetchWithNgrokHeader(`${ API }/api/category`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            },
             body: JSON.stringify(data)
         })
         .then(res => {
@@ -24,39 +32,24 @@ const useCategory = () => {
     }
 
     const getCategories = async () => {
-        const response = await fetch(`${ API }/api/category`, {
+        const response = await fetchWithNgrokHeader(`${ API }/api/category`, {
             method: 'GET',
-            headers: {
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            }
         })
         const data = await response.json()
         return data.categorias
     }
 
     const getCategoryById = async ( id ) => {
-        const response = await fetch(`${API}/api/category/${id}`, {
+        const response = await fetchWithNgrokHeader(`${API}/api/category/${id}`, {
             method: 'GET',
-            headers: {
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            }
         });
         const data = await response.json();
         return data;
     }
 
     const updateCategory = async ( id, data ) => {
-        await fetch(`${API}/api/category/${id}`, {
+        await fetchWithNgrokHeader(`${API}/api/category/${id}`, {
             method: 'PUT',
-            headers: {  
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            },
             body: JSON.stringify(data)
         })
         .then(res => {
@@ -69,13 +62,8 @@ const useCategory = () => {
     }
 
     const deleteCategory = ( id ) => {
-        fetch(`${API}/api/category/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json',
-                "ngrok-skip-browser-warning": "true",
-                'x-token': localStorage.getItem('idToken')
-            }   
+        fetchWithNgrokHeader(`${API}/api/category/${id}`, {
+            method: 'DELETE', 
         })
         .then(res => {
             if (res.ok) { 
