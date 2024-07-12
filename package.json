@@ -21,7 +21,6 @@
     "@vitejs/plugin-vue": "^3.0.0",
     "@vitest/ui": "^0.25.2",
     "@vue/test-utils": "^2.0.2",
-    "cypress": "^12.1.0",
     "dotenv-webpack": "^8.0.1",
     "jsdom": "^20.0.0",
     "start-server-and-test": "^1.15.2",

@@ -9,6 +9,7 @@ const useCategory = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "ngrok-skip-browser-warning": "true",
                 'x-token': localStorage.getItem('idToken')
             },
             body: JSON.stringify(data)
@@ -27,6 +28,7 @@ const useCategory = () => {
             method: 'GET',
             headers: {
                 'Content-type': 'application/json',
+                "ngrok-skip-browser-warning": "true",
                 'x-token': localStorage.getItem('idToken')
             }
         })
@@ -39,6 +41,7 @@ const useCategory = () => {
             method: 'GET',
             headers: {
                 'Content-type': 'application/json',
+                "ngrok-skip-browser-warning": "true",
                 'x-token': localStorage.getItem('idToken')
             }
         });
@@ -51,6 +54,7 @@ const useCategory = () => {
             method: 'PUT',
             headers: {  
                 'Content-type': 'application/json',
+                "ngrok-skip-browser-warning": "true",
                 'x-token': localStorage.getItem('idToken')
             },
             body: JSON.stringify(data)
@@ -69,6 +73,7 @@ const useCategory = () => {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
+                "ngrok-skip-browser-warning": "true",
                 'x-token': localStorage.getItem('idToken')
             }   
         })
